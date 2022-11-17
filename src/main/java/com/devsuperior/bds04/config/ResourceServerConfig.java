@@ -23,8 +23,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	private JwtTokenStore tokenStore;
 	
 	private static final String[] PUBLIC = { "/oauth/token", "/h2-console/**" };
-	
-	private static final String[] CLIENT_GET = { "/departments/**", "/employees/**" };
+
+	private static final String[] EVENT_POST = { "/events/**" };
+
+	private static final String[] CITY_EVENT_GET = { "/cities/**" , "/events/**"};
 	
 	@Override
 	public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
@@ -40,8 +42,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 		}
 		
 		http.authorizeRequests()
-		.antMatchers(PUBLIC).permitAll()
-		.antMatchers(HttpMethod.GET, CLIENT_GET).hasAnyRole("CLIENT", "ADMIN")
-		.anyRequest().hasAnyRole("ADMIN");
+		.antMatchers(PUBLIC).permitAll() //Endpoints de login e do H2 devem ser públicos
+		.antMatchers(HttpMethod.GET,CITY_EVENT_GET).permitAll() //Os endpoints GET para /cities e /events devem ser públicos
+		.antMatchers(HttpMethod.POST, EVENT_POST).hasAnyRole("CLIENT", "ADMIN") //Endpoint POST de /events devem requerer login de ADMIN ou CLIENT
+		.anyRequest().hasAnyRole("ADMIN");//Todos demais endpoints devem requerer login de ADMIN
 	}	
 }
