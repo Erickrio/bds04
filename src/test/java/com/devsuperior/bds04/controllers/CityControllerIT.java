@@ -61,7 +61,7 @@ public class CityControllerIT {
 		
 		result.andExpect(status().isUnauthorized());
 	}
-	
+
 	@Test
 	public void insertShouldReturn403WhenClientLogged() throws Exception {
 
@@ -132,4 +132,7 @@ public class CityControllerIT {
 		result.andExpect(jsonPath("$[1].name").value("Belém"));
 		result.andExpect(jsonPath("$[2].name").value("Brasília"));
 	}
+
+
+
 }
